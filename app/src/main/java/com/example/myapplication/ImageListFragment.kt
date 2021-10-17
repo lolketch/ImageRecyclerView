@@ -28,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URL
 import android.graphics.drawable.Drawable
 import android.widget.Button
+import android.widget.TextView
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
@@ -67,7 +68,7 @@ class ImageListFragment:Fragment() {
             ) {
                 val linearLayoutManager:LinearLayoutManager = LinearLayoutManager(context)
                 val data: List<ApiResponse>? = response.body()
-                val imageAdapter = data?.let { ImageAdapter(it,context!!,linearLayoutManager) }
+                val imageAdapter = data?.let { ImageAdapter(it,context!!) }
                 recyclerView.adapter = imageAdapter
                 recyclerView.layoutManager = linearLayoutManager
             }
@@ -79,7 +80,7 @@ class ImageListFragment:Fragment() {
     }
 }
 
-class ImageAdapter(private val results: List<ApiResponse>, val context:Context, val linearLayoutManager: LinearLayoutManager ):
+class ImageAdapter(private val results: List<ApiResponse>, val context:Context):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val HEADER_ITEM = 0
     private val NORMAL_ITEM = 1
@@ -88,6 +89,7 @@ class ImageAdapter(private val results: List<ApiResponse>, val context:Context, 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         mRecyclerView = recyclerView;
+        recyclerView.layoutManager
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -112,10 +114,9 @@ class ImageAdapter(private val results: List<ApiResponse>, val context:Context, 
             Glide
                 .with(context)
                 .load(results[position].picture)
-                .fitCenter()
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                 .into(viewHolder.photo)
-            holder.btn_next.setOnClickListener {
+            viewHolder.btn_next.setOnClickListener {
+                val linearLayoutManager = mRecyclerView.layoutManager as LinearLayoutManager
                 linearLayoutManager.scrollToPositionWithOffset(1,0)
             }
         } else {
@@ -132,7 +133,7 @@ class ImageAdapter(private val results: List<ApiResponse>, val context:Context, 
                         .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                         .placeholder(R.drawable.ic_plug)
                         .load(results[position].picture)
-                        .into(viewHolder.photo);
+                        .into(viewHolder.photo)
                 }
             }
 

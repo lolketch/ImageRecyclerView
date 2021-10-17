@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="btn_other_pictures">Next image</string>
+    <string name="btn_other_pictures">Остальные картинки</string>
 </resources>
